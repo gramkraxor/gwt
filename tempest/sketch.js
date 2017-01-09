@@ -24,12 +24,12 @@ var AUTHORS = [
  * p5 setup
  */
 function setup() {
-	createCanvas(1024, 768);
+	createCanvas(960, 720);
 }
 
 /**
  * p5 drawing
  */
 function draw() {
-	
+	background(255);
 }

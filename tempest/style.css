@@ -6,19 +6,33 @@ body {
 	font-weight: bold;
 	background: #000;
 	color: #fff;
+	text-align: center;
+}
+
+canvas {
+	margin: auto;
+	margin-top: 24px;
+	display: block;
+}
+
+#title {
+	font-size: 36px;
+	margin: auto;
+	margin-top: 24px;
+	display: block;
 }
 
 ::selection {
-	color: #000;
-	background: #0f0;
+	color: #fff;
+	background: #00f;
 }
 
 ::-webkit-scrollbar {
-	width: 2px;
-	height: 2px;
+	width: 8px;
+	height: 8px;
 	background-color: #000;
 }
 
 ::-webkit-scrollbar-thumb, ::-webkit-scrollbar-corner {
-	background-color: #0f0;
+	background-color: #fff;
 }
