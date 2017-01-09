@@ -25,6 +25,12 @@ var AUTHORS = [
  */
 function setup() {
 	createCanvas(960, 720);
+	$("body").append(
+			"<div id=\"footer\">" +
+			"	Tempest, a game based on Shakespeare\'s \"The Tempest\"<br/>" +
+			"	Copyright &copy; 2017 | Justin Garza, Owen Graham, Colemen Johnson, Panya Xiong, Isaac Zaman" +
+			"</div>"
+			);
 }
 
 /**

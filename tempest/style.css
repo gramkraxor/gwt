@@ -2,24 +2,30 @@ body {
 	padding: 0;
 	margin: 0;
 	
-	font-family: "Ubuntu Mono", "Courier New", Monospace;
-	font-weight: bold;
+	/*font-family: "Ubuntu Mono", "Courier New", Monospace;*/
+	font-family: "Ubuntu", "Arial", /*"Ariel",*/ Sans-Serif;
 	background: #000;
-	color: #fff;
+	color: #bbb;
 	text-align: center;
 }
 
-canvas {
+div, canvas {
 	margin: auto;
-	margin-top: 24px;
 	display: block;
+}
+
+canvas {
+	margin-top: 24px;
 }
 
 #title {
 	font-size: 36px;
-	margin: auto;
+	font-weight: bold;
 	margin-top: 24px;
-	display: block;
+}
+
+#footer {
+	margin-top: 16px;
 }
 
 ::selection {
@@ -34,5 +40,5 @@ canvas {
 }
 
 ::-webkit-scrollbar-thumb, ::-webkit-scrollbar-corner {
-	background-color: #fff;
+	background-color: #bbb;
 }
