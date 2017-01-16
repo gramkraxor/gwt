@@ -1,0 +1,52 @@
+body {
+	padding: 0;
+	margin: 0;
+	
+	/*font-family: "Ubuntu Mono", "Courier New", Monospace;*/
+	font-family: "Ubuntu", "Trebuchet MS", "Verdana", Sans-Serif;
+	background: #000;
+	color: #bbb;
+	text-align: center;
+}
+
+div, canvas {
+	margin: auto;
+	display: block;
+}
+
+#page {
+	width: 1072px;
+	height: 100%;
+	margin-top: 12px;
+	border: 4px #bbb solid
+}
+
+canvas {
+	margin-top: 12px;
+}
+
+#title {
+	font-size: 36px;
+	font-weight: bold;
+	margin-top: 24px;
+}
+
+#footer {
+	margin-top: 16px;
+	margin-bottom: 24px;
+}
+
+::selection {
+	color: #000;
+	background: #fff;
+}
+
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+	background-color: #000;
+}
+
+::-webkit-scrollbar-thumb, ::-webkit-scrollbar-corner {
+	background-color: #bbb;
+}
