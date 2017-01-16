@@ -26,11 +26,12 @@ canvas {
 
 #footer {
 	margin-top: 16px;
+	margin-bottom: 24px;
 }
 
 ::selection {
-	color: #fff;
-	background: #00f;
+	color: #000;
+	background: #fff;
 }
 
 ::-webkit-scrollbar {

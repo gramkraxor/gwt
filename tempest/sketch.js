@@ -20,26 +20,25 @@ var AUTHORS = [
 	{name:"Isaac Zaman", role:"Author"}
 ];
 
+var authorList = (function() {
+	var r = "";
+	for (var i = 0; i < AUTHORS.length; i++) {
+		r += AUTHORS[i].name;
+		if (i < AUTHORS.length - 1) {
+			r += ", ";
+		}
+	}
+	return r;
+})();
+
 /**
  * p5 setup
  */
 function setup() {
 	createCanvas(1024, 640);
 	
-	var authorList = "";
-	for (var i = 0; i < AUTHORS.length; i++) {
-		authorList += AUTHORS[i].name;
-		if (i < AUTHORS.length - 1) {
-			authorList += ", ";
-		}
-	}
-	
-	$("body").append(
-	                 "<div id=\"footer\">" +
-	                 "	Tempest, a game based on Shakespeare\'s \"The Tempest\"<br/>" +
-	                 "	Copyright &copy; 2017 | " + authorList +
-	                 "</div>"
-	                 );
+	$("#footer").append(" | " + authorList);
+	$("#footer").appendTo("body");
 }
 
 /**
