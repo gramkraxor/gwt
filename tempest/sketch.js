@@ -38,7 +38,8 @@ function setup() {
 	createCanvas(1024, 640);
 	
 	$("#footer").append(" | " + authorList);
-	$("#footer").appendTo("body");
+	$("canvas").appendTo("#page");
+	$("#footer").appendTo("#page");
 }
 
 /**
