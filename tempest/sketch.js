@@ -96,8 +96,10 @@ function Sprite(x, y, w, h, render) {
 		this.gotoY(y);
 	}
 	this.move = function(x, y) {
-		this.x += x;
-		this.y += y;
+		//if (this.x + x <= width && this.x + x >= 0)
+			this.x += x;
+		//if (this.y + y <= height && this.y + y >= 0)
+			this.y += y;
 	}
 	
 	this.width = w;
