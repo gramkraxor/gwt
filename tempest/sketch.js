@@ -20,31 +20,88 @@ var AUTHORS = [
 	{name:"Isaac Zaman", role:"Author"}
 ];
 
+/**
+ * authors in string
+ */
 var authorList = (function() {
 	var r = "";
 	for (var i = 0; i < AUTHORS.length; i++) {
 		r += AUTHORS[i].name;
-		if (i < AUTHORS.length - 1) {
-			r += ", ";
-		}
+		r += (i < AUTHORS.length - 1) ? ", " : "";
 	}
 	return r;
 })();
 
+var charMain;
+
 /**
  * p5 setup
+ * use as start function
  */
 function setup() {
 	createCanvas(1024, 640);
 	
 	$("#footer").append(" | " + authorList);
 	$("canvas").appendTo("#page");
-	$("#footer").appendTo("#page");
+	
+	charMain = new Sprite(width / 2, height / 2, 24, 48,
+			function() {
+				fill(255, 0, 0);
+				noStroke();
+				rectMode(CENTER);
+				rect(this.x, this.y, this.width, this.height);
+			});
 }
 
 /**
- * p5 drawing
+ *  p5 loop
  */
 function draw() {
 	background(255);
+	
+	charMain.render();
+	
+	// W
+	if (keyIsDown(87)) {
+		charMain.move(0, -6);
+	}
+	// A
+	if (keyIsDown(65)) {
+		charMain.move(-6, 0);
+	}
+	// S
+	if (keyIsDown(83)) {
+		charMain.move(0, 6);
+	}
+	// D
+	if (keyIsDown(68)) {
+		charMain.move(6, 0);
+	}
+}
+
+/**
+ * sprite
+ * 
+ * @param render; rendering function
+ */
+function Sprite(x, y, w, h, render) {
+	this.gotoX = function(x) {
+		this.x = x;
+	}
+	this.gotoY = function(y) {
+		this.y = y;
+	}
+	this.goto = function(x, y) {
+		this.gotoX(x);
+		this.gotoY(y);
+	}
+	this.move = function(x, y) {
+		this.x += x;
+		this.y += y;
+	}
+	
+	this.width = w;
+	this.height = h;
+	this.render = render;
+	this.goto(x, y);
 }
