@@ -13,11 +13,11 @@
  * persons which have taken part in creating this finest of games
  */
 var AUTHORS = [
-	{name:"Justin Garza", role:"Author"},
-	{name:"Owen Graham", role:"Author"},
-	{name:"Colemen \"CJ\" Johnson", role:"Author"},
-	{name:"Panya Xiong", role:"Author"},
-	{name:"Isaac Zaman", role:"Author"}
+	{name:"Justin Garza", role:"Audio"},
+	{name:"Owen Graham", role:"Project Director"},
+	{name:"Colemen \"CJ\" Johnson", role:"Code Management"},
+	{name:"Panya Xiong", role:"Graphics"},
+	{name:"Isaac Zaman", role:"Sorcery"}
 ];
 
 /**
