@@ -32,8 +32,6 @@ var authorList = (function() {
 	return r;
 })();
 
-var charMain;
-
 /**
  * p5 setup
  * use as start function
@@ -44,13 +42,19 @@ function setup() {
 	$("#footer").append(" | " + authorList);
 	$("canvas").appendTo("#page");
 	
-	charMain = new Sprite(width / 2, height / 2, 24, 48,
-			function() {
-				fill(255, 0, 0);
-				noStroke();
-				rectMode(CENTER);
-				rect(this.x, this.y, this.width, this.height);
-			});
+	// main character
+	charMain = new Sprite(0, 0, 32, 32, loadImage("graphics/char-main.png"));
+	charMain.gotoCenter(width / 2, height / 2),
+	charMain.enclose = true;
+	
+	// background
+	charMap = new Sprite(-(width / 2), -(height / 2), 2048, 1280, loadImage("graphics/bg-beach.png"));
+	charMap.move = function(x, y) {
+		if (this.x + this.width + x >= width && this.x + x <= 0)
+			this.x += x;
+		if (this.y + this.height + y >= height && this.y + y <= 0)
+			this.y += y;
+	}
 }
 
 /**
@@ -59,32 +63,57 @@ function setup() {
 function draw() {
 	background(255);
 	
-	charMain.render();
+	charMap.display();
+	charMain.display();
+	
+	var speed = 6;
 	
 	// W
 	if (keyIsDown(87)) {
-		charMain.move(0, -6);
+		if (charMain.centerY() > height / 2 || charMap.y + speed > 0) {
+			charMain.move(0, -speed);
+		} else {
+			charMap.move(0, speed);
+		}
 	}
 	// A
 	if (keyIsDown(65)) {
-		charMain.move(-6, 0);
+		if (charMain.centerX() > width / 2 || charMap.x + speed > 0) {
+			charMain.move(-speed, 0);
+		} else {
+			charMap.move(speed, 0);
+		}
 	}
 	// S
 	if (keyIsDown(83)) {
-		charMain.move(0, 6);
+		if (charMain.centerY() < height / 2 || charMap.y + charMap.height - speed < height) {
+			charMain.move(0, speed);
+		} else {
+			charMap.move(0, -speed);
+		}
 	}
 	// D
 	if (keyIsDown(68)) {
-		charMain.move(6, 0);
+		if (charMain.centerX() < width / 2 || charMap.x + charMap.width - speed < width) {
+			charMain.move(speed, 0);
+		} else {
+			charMap.move(-speed, 0);
+		}
 	}
 }
 
 /**
  * sprite
- * 
- * @param render; rendering function
  */
-function Sprite(x, y, w, h, render) {
+function Sprite(x, y, w, h, img) {
+	
+	this.centerX = function() {
+		return this.x + this.width / 2;
+	}
+	this.centerY = function() {
+		return this.y + this.height / 2;
+	}
+	
 	this.gotoX = function(x) {
 		this.x = x;
 	}
@@ -95,15 +124,36 @@ function Sprite(x, y, w, h, render) {
 		this.gotoX(x);
 		this.gotoY(y);
 	}
+	
+	this.gotoCenterX = function(x) {
+		this.x = x - this.width / 2;
+	}
+	this.gotoCenterY = function(y) {
+		this.y = y - this.height / 2;
+	}
+	this.gotoCenter = function(x, y) {
+		this.gotoCenterX(x);
+		this.gotoCenterY(y);
+	}
+	
 	this.move = function(x, y) {
-		//if (this.x + x <= width && this.x + x >= 0)
+		if ((this.x + x + this.width <= width && this.x + x >= 0) || !this.enclose)
 			this.x += x;
-		//if (this.y + y <= height && this.y + y >= 0)
+		if ((this.y + y + this.height <= height && this.y + y >= 0) || !this.enclose)
 			this.y += y;
 	}
 	
+	this.display = function() {
+		try {
+			image(this.img, this.x, this.y, this.width, this.height);
+		} catch (e) {
+		}
+	}
+	
+	this.img = img;
+	this.enclose = false;
 	this.width = w;
 	this.height = h;
-	this.render = render;
 	this.goto(x, y);
+	
 }

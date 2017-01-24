@@ -5,7 +5,7 @@ body {
 	/*font-family: "Ubuntu Mono", "Courier New", Monospace;*/
 	font-family: "Ubuntu", "Trebuchet MS", "Verdana", Sans-Serif;
 	background: #333;
-	background: url("graphics/bg-beach.jpg") no-repeat fixed center top;
+	background: url("graphics/bg-beach.png") no-repeat fixed center top;
 	text-align: center;
 }
 
