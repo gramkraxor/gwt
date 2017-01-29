@@ -2,27 +2,21 @@
  * Calculus AB / Great World Texts: The Tempest
  * 
  * Tempest, a game by:
- * @author Justin Garza
  * @author Owen Graham
+ * @author Isaac Zaman
+ * @author Justin Garza
  * @author Colemen Johnson
  * @author Panya Xiong
- * @author Isaac Zaman
  */
 
-/**
- * persons which have taken part in creating this finest of games
- */
 var AUTHORS = [
+	{name:"Owen Graham", role:"Lead Code"},
+	{name:"Isaac Zaman", role:"Code"},
 	{name:"Justin Garza", role:"Audio"},
-	{name:"Owen Graham", role:"Project Director"},
-	{name:"Colemen \"CJ\" Johnson", role:"Code Management"},
-	{name:"Panya Xiong", role:"Graphics"},
-	{name:"Isaac Zaman", role:"Sorcery"}
+	{name:"Colemen \"CJ\" Johnson", role:"Design"},
+	{name:"Panya Xiong", role:"Graphics"}
 ];
 
-/**
- * authors in string
- */
 var authorList = (function() {
 	var r = "";
 	for (var i = 0; i < AUTHORS.length; i++) {
@@ -32,9 +26,16 @@ var authorList = (function() {
 	return r;
 })();
 
+var charList = [];
+
+var level;
+var imgGonzalo;
+var imgAntonio;
+
 /**
  * p5 setup
- * use as start function
+ * Use as startup function
+ * Load images here
  */
 function setup() {
 	createCanvas(1024, 640);
@@ -47,26 +48,43 @@ function setup() {
 	charMain.gotoCenter(width / 2, height / 2),
 	charMain.enclose = true;
 	
+	imgGonzalo = loadImage("graphics/char-main.png");
+	imgAntonio = loadImage("graphics/char-main.png");
+	
+	level = new Level(1);
+	
 	// background
 	charMap = new Sprite(-(width / 2), -(height / 2), 2048, 1280, loadImage("graphics/bg-beach.png"));
 	charMap.move = function(x, y) {
-		if (this.x + this.width + x >= width && this.x + x <= 0)
+		if (this.x + this.width + x >= width && this.x + x <= 0) {
 			this.x += x;
-		if (this.y + this.height + y >= height && this.y + y <= 0)
+			for (var i = 0; i < charList.length; i++) {
+				charList[i].x += x;
+			}
+		}
+		if (this.y + this.height + y >= height && this.y + y <= 0) {
 			this.y += y;
+			for(var i = 0; i < charList.length; i++){
+				charList[i].y += y;
+			}
+		}
 	}
 }
 
 /**
- *  p5 loop
+ *	p5 loop
  */
 function draw() {
 	background(255);
 	
-	charMap.display();
-	charMain.display();
+	if (level.ending()) {
+		level.next();
+	}
 	
-	var speed = 6;
+	var speed = 4;
+	for(var i = 0; i < charList.length; i++ ){
+		charList[i].ai();
+	}
 	
 	// W
 	if (keyIsDown(87)) {
@@ -100,60 +118,11 @@ function draw() {
 			charMap.move(-speed, 0);
 		}
 	}
-}
-
-/**
- * sprite
- */
-function Sprite(x, y, w, h, img) {
 	
-	this.centerX = function() {
-		return this.x + this.width / 2;
+	charMap.display();
+	charMain.display();
+	for(var i = 0; i < charList.length; i++ ){
+		charList[i].display();
 	}
-	this.centerY = function() {
-		return this.y + this.height / 2;
-	}
-	
-	this.gotoX = function(x) {
-		this.x = x;
-	}
-	this.gotoY = function(y) {
-		this.y = y;
-	}
-	this.goto = function(x, y) {
-		this.gotoX(x);
-		this.gotoY(y);
-	}
-	
-	this.gotoCenterX = function(x) {
-		this.x = x - this.width / 2;
-	}
-	this.gotoCenterY = function(y) {
-		this.y = y - this.height / 2;
-	}
-	this.gotoCenter = function(x, y) {
-		this.gotoCenterX(x);
-		this.gotoCenterY(y);
-	}
-	
-	this.move = function(x, y) {
-		if ((this.x + x + this.width <= width && this.x + x >= 0) || !this.enclose)
-			this.x += x;
-		if ((this.y + y + this.height <= height && this.y + y >= 0) || !this.enclose)
-			this.y += y;
-	}
-	
-	this.display = function() {
-		try {
-			image(this.img, this.x, this.y, this.width, this.height);
-		} catch (e) {
-		}
-	}
-	
-	this.img = img;
-	this.enclose = false;
-	this.width = w;
-	this.height = h;
-	this.goto(x, y);
 	
 }
