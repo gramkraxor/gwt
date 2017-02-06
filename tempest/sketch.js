@@ -32,6 +32,8 @@ var level;
 var imgGonzalo;
 var imgAntonio;
 
+var timer = 0;
+
 /**
  * p5 setup
  * Use as startup function
@@ -56,15 +58,15 @@ function setup() {
 	// background
 	charMap = new Sprite(-(width / 2), -(height / 2), 2048, 1280, loadImage("graphics/bg-beach.png"));
 	charMap.move = function(x, y) {
-		if (this.x + this.width + x >= width && this.x + x <= 0) {
+		if (this.getRight() + x >= width && this.getLeft() + x <= 0) {
 			this.x += x;
 			for (var i = 0; i < charList.length; i++) {
 				charList[i].x += x;
 			}
 		}
-		if (this.y + this.height + y >= height && this.y + y <= 0) {
+		if (this.getBottom() + y >= height && this.getTop() + y <= 0) {
 			this.y += y;
-			for(var i = 0; i < charList.length; i++){
+			for (var i = 0; i < charList.length; i++) {
 				charList[i].y += y;
 			}
 		}
@@ -75,20 +77,22 @@ function setup() {
  *	p5 loop
  */
 function draw() {
-	background(255);
+	
+	background(191);
 	
 	if (level.ending()) {
 		level.next();
 	}
 	
 	var speed = 4;
+	
 	for(var i = 0; i < charList.length; i++ ){
 		charList[i].ai();
 	}
 	
 	// W
 	if (keyIsDown(87)) {
-		if (charMain.centerY() > height / 2 || charMap.y + speed > 0) {
+		if (charMain.getCenterY() > height / 2 || charMap.y + speed > 0) {
 			charMain.move(0, -speed);
 		} else {
 			charMap.move(0, speed);
@@ -96,7 +100,7 @@ function draw() {
 	}
 	// A
 	if (keyIsDown(65)) {
-		if (charMain.centerX() > width / 2 || charMap.x + speed > 0) {
+		if (charMain.getCenterX() > width / 2 || charMap.x + speed > 0) {
 			charMain.move(-speed, 0);
 		} else {
 			charMap.move(speed, 0);
@@ -104,7 +108,7 @@ function draw() {
 	}
 	// S
 	if (keyIsDown(83)) {
-		if (charMain.centerY() < height / 2 || charMap.y + charMap.height - speed < height) {
+		if (charMain.getCenterY() < height / 2 || charMap.y + charMap.height - speed < height) {
 			charMain.move(0, speed);
 		} else {
 			charMap.move(0, -speed);
@@ -112,7 +116,7 @@ function draw() {
 	}
 	// D
 	if (keyIsDown(68)) {
-		if (charMain.centerX() < width / 2 || charMap.x + charMap.width - speed < width) {
+		if (charMain.getCenterX() < width / 2 || charMap.x + charMap.width - speed < width) {
 			charMain.move(speed, 0);
 		} else {
 			charMap.move(-speed, 0);
@@ -120,9 +124,13 @@ function draw() {
 	}
 	
 	charMap.display();
-	charMain.display();
-	for(var i = 0; i < charList.length; i++ ){
+	for (var i = 0; i < charList.length; i++ ) {
 		charList[i].display();
 	}
+	charMain.display();
+	
+	$("#title").html(timer + "");
+	
+	timer += 1;
 	
 }
