@@ -39,15 +39,14 @@ function Level(l) {
 		charList.push(charGonzalo);
 		
 		this.ending = function() {
-			if (charMain.x < 64)
+			//if (charMain.x < 64)
 				return true;
 			return false;
 		}
 		this.next = function() {
 			level = new Level(101);
 			var charBob = new Sprite(0, 0, 32, 32, imgAntonio);
-			charBob.gotoX(144);
-			charBob.gotoCenterY(height / 2);
+			charBob.gotoMap(144, 144);
 			charList.push(charBob);
 		}
 	}

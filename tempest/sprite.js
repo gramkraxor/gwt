@@ -81,6 +81,17 @@ function Sprite(x, y, w, h, img) {
 		this.gotoCenterY(y);
 	}
 	
+	this.gotoMapX = function(x) {
+		this.x = charMap.x + x;
+	}
+	this.gotoMapY = function(y) {
+		this.y = charMap.y + y;
+	}
+	this.gotoMap = function(x, y) {
+		this.gotoMapX(x);
+		this.gotoMapY(y);
+	}
+	
 	this.move = function(x, y) {
 		var canMoveX = true;
 		var canMoveY = true;
@@ -102,34 +113,39 @@ function Sprite(x, y, w, h, img) {
 			
 			/*
 			// Can this pass above or below other sprites?
-			if (!(this.getContactBottom() + y <= c.getContactTop() || this.getContactTop + y >= c.getContactBottom())) {
+			if (!(this.getContactBottom() + y <= c.getContactTop() || this.getContactTop() + y >= c.getContactBottom())) {
 				// If not, will it go far enough to hit them?
-				if (!(this.getContactRight() + x <= c.getContactLeft() || this.getContactLeft + x >= c.getContactRight())) {
+				if (!(this.getContactRight() + x <= c.getContactLeft() || this.getContactLeft() + x >= c.getContactRight())) {
 					//canMoveX = false;
 				}
 			}
-			if (!(this.getContactBottom() + y <= c.getContactTop() || this.getContactTop + y >= c.getContactBottom())) {
-				if (!(this.getContactRight() + x <= c.getContactLeft() || this.getContactLeft + x >= c.getContactRight())) {
+			if (!(this.getContactBottom() + y <= c.getContactTop() || this.getContactTop() + y >= c.getContactBottom())) {
+				if (!(this.getContactRight() + x <= c.getContactLeft() || this.getContactLeft() + x >= c.getContactRight())) {
 					//canMoveY = false;
 				}
 			}
 			//*/
 			
-			var xIntersect = !(this.getContactRight() + x <= c.getContactLeft() || this.getContactLeft + x >= c.getContactRight());
-			var yIntersect = !(this.getContactBottom() + y <= c.getContactTop() || this.getContactTop + y >= c.getContactBottom());
+			// Determine whether the new position will be outside of the object
+			var toLeft  = this.getContactRight()  + x <= c.getContactLeft();
+			var toRight = this.getContactLeft()   + x >= c.getContactRight();
+			var above   = this.getContactBottom() + y <= c.getContactTop();
+			var below   = this.getContactTop()    + y >= c.getContactBottom();
 			
-			if (xIntersect) {
-			}
-			if (yIntersect) {
-			}
-			
+			/*/
 			$("#footer").append(
-				"toLeft=" + (this.getContactRight() <= c.getContactLeft()) + ";<br/>" +
-				"toRight=" + (this.getContactLeft >= c.getContactRight()) + ";<br/>" +
-				"above=" + (this.getContactBottom() <= c.getContactTop()) + ";<br/>" +
-				"below=" + (this.getContactTop >= c.getContactBottom()) + ";"
+				(this.getContactRight()  + x) + " <= " + c.getContactLeft()   + " = " + toLeft  + "<br>" +
+				(this.getContactLeft()   + x) + " >= " + c.getContactRight()  + " = " + toRight + "<br>" +
+				(this.getContactBottom() + y) + " <= " + c.getContactTop()    + " = " + above   + "<br>" +
+				(this.getContactTop()    + y) + " >= " + c.getContactBottom() + " = " + below
 				
 			);
+			//*/
+			
+			if (!(toLeft || toRight || above || below)) {
+				canMoveX = false;
+				canMoveY = false;
+			}
 			
 		}
 		

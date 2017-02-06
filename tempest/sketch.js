@@ -63,12 +63,14 @@ function setup() {
 			for (var i = 0; i < charList.length; i++) {
 				charList[i].x += x;
 			}
+			charMain.x += x;
 		}
 		if (this.getBottom() + y >= height && this.getTop() + y <= 0) {
 			this.y += y;
 			for (var i = 0; i < charList.length; i++) {
 				charList[i].y += y;
 			}
+			charMain.y += y;
 		}
 	}
 }
@@ -92,33 +94,29 @@ function draw() {
 	
 	// W
 	if (keyIsDown(87)) {
-		if (charMain.getCenterY() > height / 2 || charMap.y + speed > 0) {
-			charMain.move(0, -speed);
-		} else {
+		charMain.move(0, -speed);
+		if (!(charMain.getCenterY() > height / 2 || charMap.y + speed > 0)) {
 			charMap.move(0, speed);
 		}
 	}
 	// A
 	if (keyIsDown(65)) {
-		if (charMain.getCenterX() > width / 2 || charMap.x + speed > 0) {
-			charMain.move(-speed, 0);
-		} else {
+		charMain.move(-speed, 0);
+		if (!(charMain.getCenterX() > width / 2 || charMap.x + speed > 0)) {
 			charMap.move(speed, 0);
 		}
 	}
 	// S
 	if (keyIsDown(83)) {
-		if (charMain.getCenterY() < height / 2 || charMap.y + charMap.height - speed < height) {
-			charMain.move(0, speed);
-		} else {
+		charMain.move(0, speed);
+		if (!(charMain.getCenterY() < height / 2 || charMap.y + charMap.height - speed < height)) {
 			charMap.move(0, -speed);
 		}
 	}
 	// D
 	if (keyIsDown(68)) {
-		if (charMain.getCenterX() < width / 2 || charMap.x + charMap.width - speed < width) {
-			charMain.move(speed, 0);
-		} else {
+		charMain.move(speed, 0);
+		if (!(charMain.getCenterX() < width / 2 || charMap.x + charMap.width - speed < width)) {
 			charMap.move(-speed, 0);
 		}
 	}
