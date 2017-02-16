@@ -39,7 +39,7 @@ function Level(l) {
 		charList.push(charGonzalo);
 		
 		this.ending = function() {
-			//if (charMain.x < 64)
+			if (charMain.x < 64)
 				return true;
 			return false;
 		}
