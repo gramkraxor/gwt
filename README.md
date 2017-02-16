@@ -1,2 +1,2 @@
-# gramkraxor.github.io/Tempest
+# Tempest
 Great World Texts Project
