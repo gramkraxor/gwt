@@ -109,36 +109,11 @@ function Sprite(x, y, w, h, img) {
 			
 			// Note: This basic method of contact box movement will cause extremely thin objects to skip past each other
 			
-			/*
-			// Can this pass above or below other sprites?
-			if (!(this.getContactBottom() + y <= c.getContactTop() || this.getContactTop() + y >= c.getContactBottom())) {
-				// If not, will it go far enough to hit them?
-				if (!(this.getContactRight() + x <= c.getContactLeft() || this.getContactLeft() + x >= c.getContactRight())) {
-					//canMoveX = false;
-				}
-			}
-			if (!(this.getContactBottom() + y <= c.getContactTop() || this.getContactTop() + y >= c.getContactBottom())) {
-				if (!(this.getContactRight() + x <= c.getContactLeft() || this.getContactLeft() + x >= c.getContactRight())) {
-					//canMoveY = false;
-				}
-			}
-			//*/
-			
 			// Determine whether the new position will be outside of the object
 			var toLeft  = this.getContactRight()  + x <= c.getContactLeft();
 			var toRight = this.getContactLeft()   + x >= c.getContactRight();
 			var above   = this.getContactBottom() + y <= c.getContactTop();
 			var below   = this.getContactTop()    + y >= c.getContactBottom();
-			
-			/*/
-			$("#footer").append(
-				(this.getContactRight()  + x) + " <= " + c.getContactLeft()   + " = " + toLeft  + "<br>" +
-				(this.getContactLeft()   + x) + " >= " + c.getContactRight()  + " = " + toRight + "<br>" +
-				(this.getContactBottom() + y) + " <= " + c.getContactTop()    + " = " + above   + "<br>" +
-				(this.getContactTop()    + y) + " >= " + c.getContactBottom() + " = " + below
-				
-			);
-			//*/
 			
 			if (!(toLeft || toRight || above || below)) {
 				canMoveX = false;
@@ -147,12 +122,8 @@ function Sprite(x, y, w, h, img) {
 			
 		}
 		
-		if (canMoveX) {
-			this.x += x;
-		}
-		if (canMoveY) {
-			this.y += y;
-		}
+		this.x += canMoveX ? x : 0;
+		this.y += canMoveY ? y : 0;
 	}
 	
 	this.display = function() {

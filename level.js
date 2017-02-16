@@ -45,9 +45,11 @@ function Level(l) {
 		}
 		this.next = function() {
 			level = new Level(101);
+			//*/
 			var charBob = new Sprite(0, 0, 32, 32, imgAntonio);
 			charBob.gotoMap(144, 144);
 			charList.push(charBob);
+			//*/
 		}
 	}
 }
