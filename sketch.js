@@ -127,8 +127,6 @@ function draw() {
 	}
 	charMain.display();
 	
-	$("#title").html(timer + "");
-	
 	timer += 1;
 	
 }
