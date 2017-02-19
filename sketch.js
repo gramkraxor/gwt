@@ -1,4 +1,4 @@
-/**
+/*
  * Calculus AB / Great World Texts: The Tempest
  * 
  * Tempest, a game by:
@@ -46,17 +46,20 @@ function setup() {
 	$("canvas").appendTo("#page");
 	
 	// main character
-	charMain = new Sprite(0, 0, 32, 32, loadImage("graphics/char-main.png"));
+	charMain = new Sprite(0, 0, 32, 32, loadImage("img/char-main.png"));
 	charMain.gotoCenter(width / 2, height / 2),
 	charMain.enclose = true;
 	
-	imgGonzalo = loadImage("graphics/char-main.png");
-	imgAntonio = loadImage("graphics/char-main.png");
+	imgGonzalo = loadImage("img/char-main.png");
+	imgAntonio = loadImage("img/char-main.png");
 	
-	level = new Level(1);
+	imgMap = loadImage("img/bg-beach.png");
+	imgLvl1 = loadImage("img/bg-lvl1.png");
+	imgLvl2 = loadImage("img/bg-beach.png");
+	imgLvl3 = loadImage("img/bg-beach.png");
 	
 	// background
-	charMap = new Sprite(-(width / 2), -(height / 2), 2048, 1280, loadImage("graphics/bg-beach.png"));
+	charMap = new Sprite(-width / 2, -height / 2, 2048, 1280, imgMap);
 	charMap.move = function(x, y) {
 		if (this.getRight() + x >= width && this.getLeft() + x <= 0) {
 			this.x += x;
@@ -73,6 +76,8 @@ function setup() {
 			charMain.y += y;
 		}
 	}
+	
+	level = new Level(1);
 }
 
 /**
@@ -80,44 +85,75 @@ function setup() {
  */
 function draw() {
 	
-	background(191);
+	background(255, 0, 127);
 	
 	if (level.ending()) {
 		level.next();
 	}
 	
-	var speed = 4;
+	var l = level.id;
 	
-	for(var i = 0; i < charList.length; i++ ){
+	for (var i = 0; i < charList.length; i++) {
 		charList[i].ai();
 	}
 	
-	// W
-	if (keyIsDown(87)) {
+	if (l == 1) {
+		var speed = 4;
+		// A // Left // X--
+		if (keyIsDown(65)) {
+			charMain.move(-speed, 0);
+		}
+		// D // Right // X++
+		if (keyIsDown(68)) {
+			charMain.move(speed, 0);
+		}
+		// W // Up // Y--
+		if (keyIsDown(87)) {
+			charMain.move(0, -speed);
+		}
+		// S // Down // Y++
+		if (keyIsDown(83)) {
+			charMain.move(0, speed);
+		}
+		
+		speed = 2;
+		
 		charMain.move(0, -speed);
-		if (!(charMain.getCenterY() > height / 2 || charMap.y + speed > 0)) {
-			charMap.move(0, speed);
+		charMap.move(0, speed);
+		
+		if (charMap.y == 0) {
+			charMap.gotoY(height - charMap.height);
 		}
-	}
-	// A
-	if (keyIsDown(65)) {
-		charMain.move(-speed, 0);
-		if (!(charMain.getCenterX() > width / 2 || charMap.x + speed > 0)) {
-			charMap.move(speed, 0);
+		
+	} else {
+		var speed = 4;
+		// A // Left // X--
+		if (keyIsDown(65)) {
+			charMain.move(-speed, 0);
+			if (!(charMain.getCenterX() > width / 2 || charMap.x + speed > 0)) {
+				charMap.move(speed, 0);
+			}
 		}
-	}
-	// S
-	if (keyIsDown(83)) {
-		charMain.move(0, speed);
-		if (!(charMain.getCenterY() < height / 2 || charMap.y + charMap.height - speed < height)) {
-			charMap.move(0, -speed);
+		// D // Right // X++
+		if (keyIsDown(68)) {
+			charMain.move(speed, 0);
+			if (!(charMain.getCenterX() < width / 2 || charMap.x + charMap.width - speed < width)) {
+				charMap.move(-speed, 0);
+			}
 		}
-	}
-	// D
-	if (keyIsDown(68)) {
-		charMain.move(speed, 0);
-		if (!(charMain.getCenterX() < width / 2 || charMap.x + charMap.width - speed < width)) {
-			charMap.move(-speed, 0);
+		// W // Up // Y--
+		if (keyIsDown(87)) {
+			charMain.move(0, -speed);
+			if (!(charMain.getCenterY() > height / 2 || charMap.y + speed > 0)) {
+				charMap.move(0, speed);
+			}
+		}
+		// S // Down // Y++
+		if (keyIsDown(83)) {
+			charMain.move(0, speed);
+			if (!(charMain.getCenterY() < height / 2 || charMap.y + charMap.height - speed < height)) {
+				charMap.move(0, -speed);
+			}
 		}
 	}
 	
@@ -127,6 +163,6 @@ function draw() {
 	}
 	charMain.display();
 	
-	timer += 1;
+	timer++;
 	
 }

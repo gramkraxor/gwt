@@ -1,4 +1,4 @@
-/**
+/*
  * Calculus AB / Great World Texts: The Tempest
  * 
  * Tempest, a game by:
@@ -16,9 +16,13 @@
  * @param l Level ID (int)
  */ 
 function Level(l) {
+	
+	this.id = l;
+	
 	this.ending = function() {
 		return false;
 	}
+	
 	this.next = function() {
 		charList = [];
 	}
@@ -38,6 +42,13 @@ function Level(l) {
 		charList.push(charAntonio);
 		charList.push(charGonzalo);
 		
+		charMap.img = imgLvl1;
+		charMap.width = 1024;
+		charMap.imgWidth = charMap.width;
+		charMap.contactHeight = 1280;
+		charMap.imgHeight = charMap.contactHeight;
+		charMap.gotoCenter(width / 2, height / 2);
+		
 		this.ending = function() {
 			if (charMain.x < 64)
 				return true;
@@ -45,11 +56,12 @@ function Level(l) {
 		}
 		this.next = function() {
 			level = new Level(101);
-			//*/
-			var charBob = new Sprite(0, 0, 32, 32, imgAntonio);
-			charBob.gotoMap(144, 144);
-			charList.push(charBob);
-			//*/
 		}
+		
+	} else if (l == 101) {
+		charMap.img = imgLvl1;
+		var charBob = new Sprite(0, 0, 32, 32, imgAntonio);
+		charBob.gotoMap(144, 144);
+		charList.push(charBob);
 	}
 }
