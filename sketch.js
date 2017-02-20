@@ -59,29 +59,13 @@ function setup() {
 	imgLvl3 = loadImage("img/bg-beach.png");
 	
 	// background
-	charMap = new Sprite(-width / 2, -height / 2, 2048, 1280, imgMap);
-	charMap.move = function(x, y) {
-		if (this.getRight() + x >= width && this.getLeft() + x <= 0) {
-			this.x += x;
-			for (var i = 0; i < charList.length; i++) {
-				charList[i].x += x;
-			}
-			charMain.x += x;
-		}
-		if (this.getBottom() + y >= height && this.getTop() + y <= 0) {
-			this.y += y;
-			for (var i = 0; i < charList.length; i++) {
-				charList[i].y += y;
-			}
-			charMain.y += y;
-		}
-	}
+	setMap(2048, 1280, imgMap);
 	
 	level = new Level(1);
 }
 
 /**
- *	p5 loop
+ * p5 loop
  */
 function draw() {
 	
@@ -165,4 +149,28 @@ function draw() {
 	
 	timer++;
 	
+}
+
+/**
+ * 
+ */
+function setMap(x, y, img) {
+	charMap = new Sprite(0, 0, x, y, img);
+	charMap.gotoCenter(width / 2, height / 2);
+	charMap.move = function(x, y) {
+		if (this.getRight() + x >= width && this.getLeft() + x <= 0) {
+			this.x += x;
+			for (var i = 0; i < charList.length; i++) {
+				charList[i].x += x;
+			}
+			charMain.x += x;
+		}
+		if (this.getBottom() + y >= height && this.getTop() + y <= 0) {
+			this.y += y;
+			for (var i = 0; i < charList.length; i++) {
+				charList[i].y += y;
+			}
+			charMain.y += y;
+		}
+	}
 }

@@ -30,7 +30,7 @@ function Level(l) {
 	charList = [];
 	timer = 0;
 	
-	if (l == 1) { // Level 1
+	if (this.id == 1) { // Level 1
 		charList = [];
 		
 		var charAntonio = new Sprite(0, 0, 32, 32, imgAntonio);
@@ -42,12 +42,11 @@ function Level(l) {
 		charList.push(charAntonio);
 		charList.push(charGonzalo);
 		
-		charMap.img = imgLvl1;
-		charMap.width = 1024;
-		charMap.imgWidth = charMap.width;
-		charMap.contactHeight = 1280;
-		charMap.imgHeight = charMap.contactHeight;
-		charMap.gotoCenter(width / 2, height / 2);
+		setMap(1024, 1280, imgLvl1);
+		charMap.display = function() {
+			image(this.img, this.getImgLeft(), this.getImgTop(), this.imgWidth, this.imgHeight / 2);
+			image(this.img, this.getImgLeft(), this.getImgTop() + this.imgHeight / 2, this.imgWidth, this.imgHeight / 2);
+		}
 		
 		this.ending = function() {
 			if (charMain.x < 64)
@@ -58,10 +57,11 @@ function Level(l) {
 			level = new Level(101);
 		}
 		
-	} else if (l == 101) {
-		charMap.img = imgLvl1;
+	} else if (this.id == 101) {
 		var charBob = new Sprite(0, 0, 32, 32, imgAntonio);
 		charBob.gotoMap(144, 144);
 		charList.push(charBob);
+	} else {
+		setMap(2048, 1280, imgMap);
 	}
 }

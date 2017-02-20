@@ -130,10 +130,9 @@ function Sprite(x, y, w, h, img) {
 	}
 	
 	this.display = function() {
-		try {
-			image(this.img, this.getImgLeft(), this.getImgTop(), this.imgWidth, this.imgHeight);
-		} catch (e) {
-		}
+		//try {
+		image(this.img, this.getImgLeft(), this.getImgTop(), this.imgWidth, this.imgHeight);
+		//} catch (e) {}
 	}
 	
 	this.ai = function() {}
