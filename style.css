@@ -24,7 +24,7 @@ div, canvas {
 	background: rgba(255, 255, 255, 0.75);
 }
 
-canvas {
+canvas, iframe {
 	margin-top: 12px;
 	margin-bottom: 24px;
 	border: inherit;

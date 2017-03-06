@@ -9,12 +9,17 @@
  * @author Panya Xiong
  */
 
+var S_MAP = -1;
+var S_PLAYER = 0;
+var S_NPC = 1;
+var S_BARREL = 2;
+
 /**
  * Sprite constructor
  * 
  * @param img Image loaded from setup()
  */
-function Sprite(x, y, w, h, img) {
+function Sprite(x, y, w, h, img, type) {
 	
 	this.img = img;
 	this.enclose = false;
@@ -23,6 +28,8 @@ function Sprite(x, y, w, h, img) {
 	this.imgY = 0;
 	this.imgWidth = w;
 	this.imgHeight = h;
+	
+	this.type = type;
 	
 	this.getImgLeft = function() {
 		return this.x + this.imgX;
