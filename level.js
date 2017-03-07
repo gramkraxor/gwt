@@ -53,10 +53,17 @@ function Level(l) {
 		}
 		
 		this.draw = function() {
-			if ((timer % 128) == 0) {
+			if ((timer % 64) == 0) {
+				var amount = getRandomInt(1, 4);
+				var poss = [];
+				for (var i = 0; i < amount; i++) { poss.push(getRandomInt2(0, width - 64, 64)); }
+				for (var i = 0; i < amount; i++) {
+					
+				}
 				charList.push(new Sprite(getRandomInt2(0, width - 64, 32), -64, 64, 64, imgAntonio, S_BARREL));
+				charList.push(new Sprite(getRandomInt2(0, width - 64, 32), -64, 64, 64, imgAntonio, S_CRATE));
 			}
-			//$("#title").html(timer + " % 128 = " + (timer % 128));
+			//$("#title").html(timer + " % 64 = " + (timer % 64));
 		}
 		
 		this.ending = function() {

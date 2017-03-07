@@ -11,8 +11,8 @@
 
 var AUTHORS = [
 	{name:"Owen Graham", role:"Lead Code"},
-	{name:"Isaac Zaman", role:"Driving"},
-	{name:"Justin Garza", role:"Ninja"},
+	{name:"Isaac Zaman", role:"Sorcery"},
+	{name:"Justin Garza", role:"Thief"},
 	{name:"Colemen \"CJ\" Johnson", role:"Unknown"},
 	{name:"Panya Xiong", role:"Pizza"}
 ];
@@ -130,9 +130,11 @@ function draw() {
 	
 	if (l == 1) {
 		
+		// Player speed
 		var speed = 4;
 		if (clunk) {
-			speed *= timer % 4 == 0 ? 4 : 0;
+			var clunkiness = 4;
+			speed *= timer % clunkiness == 0 ? clunkiness : 0;
 		}
 		
 		// A // Left // X--
@@ -152,6 +154,7 @@ function draw() {
 			charMain.move(0, speed);
 		}
 		
+		// Map speed
 		speed = 2;
 		
 		charMain.move(0, -speed);
@@ -165,9 +168,11 @@ function draw() {
 		}
 		
 	} else {
+		// Player speed
 		var speed = 4;
 		if (clunk) {
-			speed *= timer % 4 == 0 ? 4 : 0;
+			var clunkiness = 4;
+			speed *= timer % clunkiness == 0 ? clunkiness : 0;
 		}
 		
 		// A // Left // X--
@@ -218,7 +223,7 @@ function draw() {
 			konamiProgress = 0;
 		}
 	}
-	$("#title").html(konamiProgress);
+	//$("#title").html(konamiProgress);
 	if (konamiProgress >= konamiCode.length) {
 		if (konamiMode == NEVER || konamiMode == YOUTUBE) {
 			konami();
@@ -244,7 +249,7 @@ function setMap(x, y, img) {
 				charList[i].x += x;
 			}
 			charMain.x += x;
-		}
+		}	
 		if (this.getBottom() + y >= height && this.getTop() + y <= 0) {
 			this.y += y;
 			for (var i = 0; i < charList.length; i++) {

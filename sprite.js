@@ -9,10 +9,11 @@
  * @author Panya Xiong
  */
 
-var S_MAP = -1;
+var S_MAP    = -1;
 var S_PLAYER = 0;
-var S_NPC = 1;
+var S_NPC    = 1;
 var S_BARREL = 2;
+var S_CRATE  = 3;
 
 /**
  * Sprite constructor
@@ -142,7 +143,13 @@ function Sprite(x, y, w, h, img, type) {
 		//} catch (e) {}
 	}
 	
-	this.ai = function() {}
+	if (this.type == S_BARREL) {
+		this.ai = function() {
+			this.y += 2;
+		}
+	} else {
+		this.ai = function() {}
+	}
 	
 	this.goto(x, y);
 	
