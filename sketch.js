@@ -76,8 +76,10 @@ function konami() {
 	} else if (konamiMode == NYAN) {
 		image(konamiImg, 0, 0, width, height);
 	} else if (konamiMode == YOUTUBE) {
-		$("canvas").remove();
 		$("iframe").remove();
+		
+		$("canvas").remove();
+		//$("#alt").remove();
 		$("#page").append("<iframe style=\"height:" + height + "px;width:" + width + "px;\" src=\"" + ytUrl + "\"></iframe>");
 	}
 }
