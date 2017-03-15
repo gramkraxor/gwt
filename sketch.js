@@ -10,13 +10,14 @@
  */
 
 var AUTHORS = [
-	{name:"Owen Graham", role:"Lead Code"},
-	{name:"Isaac Zaman", role:"Sorcery"},
-	{name:"Justin Garza", role:"Thief"},
-	{name:"Colemen \"CJ\" Johnson", role:"Unknown"},
-	{name:"Panya Xiong", role:"Pizza"}
+	{name:"Owen Graham", role:"A Stick Named Paris"},
+	{name:"Isaac Zaman", role:"Sorcery & Other Things"},
+	{name:"Justin Garza", role:"A Hot Set of Wheels"},
+	{name:"Colemen \"CJ\" Johnson", role:"Icy Driveways"},
+	{name:"Panya Xiong", role:"Cheeseburger Sliders"}
 ];
 
+// Put AUTHORS into a string
 var authorList = (function() {
 	var r = "";
 	for (var i = 0; i < AUTHORS.length; i++) {
@@ -26,14 +27,12 @@ var authorList = (function() {
 	return r;
 })();
 
-var charList = [];
-var timer = 0;
+var charList = []; // Array of map-dependent sprites
+var timer = 0; // Counts game ticks defined by loops of draw()
 
-var clunk = //*
-true;
-/*/
-false
-//*/
+var clunk = false; // Will the game use 8-bit movement?
+
+// Randomizers //
 
 function getRandomInt(min, max) {
 	min = Math.ceil(min);
@@ -41,7 +40,7 @@ function getRandomInt(min, max) {
 	return Math.floor(Math.random() * (max - min)) + min;
 }
 
-function getRandomInt2(min, max, x) {
+function getRandomInt2(min, max, x) { // Random int with interval
 	min = Math.ceil(min / x);
 	max = Math.floor(max / x);
 	return (Math.floor(Math.random() * (max - min)) + min) * x;
@@ -50,6 +49,12 @@ function getRandomInt2(min, max, x) {
 function getRandomBoolean() {
 	return Math.floor(Math.random() * 2) == 1;
 }
+
+var blowback = 0;  // Barrel blowback
+var blowforth = 0; // Escapes trappednesses
+var blowaside = 0; // See above
+
+// Konami code functionality //
 
 var ytId = "QH2-TGUlwu4"; // Nyan Cat
 var ytT = 4;
@@ -66,8 +71,8 @@ var YOUTUBE = 2; // Youtube embed
 var konamiMode = YOUTUBE;
 function konami() {
 	if (konamiMode == NEVER) {
-	var url = "http://youtu.be/dQw4w9WgXcQ?t=42"; // Never Gonna Give You Up
-	$(location).attr("href", url);
+		var url = "http://youtu.be/dQw4w9WgXcQ?t=42"; // Never Gonna Give You Up
+		$(location).attr("href", url);
 	} else if (konamiMode == NYAN) {
 		image(konamiImg, 0, 0, width, height);
 	} else if (konamiMode == YOUTUBE) {
@@ -85,27 +90,33 @@ function konami() {
 function setup() {
 	createCanvas(1024, 640);
 	
-	$("#footer").append(" | " + authorList);
+	$("#copyright").append(" | " + authorList);
+	$("#alt div").html("Game resources unavailable.<br/>Is this page online?");
 	$("canvas").appendTo("#page");
+	$("#footer").appendTo("#page");
+	//$("#alt").css({"height": (height + "px"), "width": (width + "px")});
+	//$("canvas").append("<div id=\"alt\">404<br/>Game resources not found</div>");
 	
 	konamiCode = [UP_ARROW, UP_ARROW, DOWN_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, LEFT_ARROW, RIGHT_ARROW, 66, 65];
 	
-	// main character
-	charMain = new Sprite(0, 0, 64, 64, loadImage("img/char-main.png"), S_PLAYER);
-	charMain.gotoCenter(width / 2, height / 2),
-	charMain.enclose = true;
-	
-	imgGonzalo = loadImage("img/char-main.png");
-	imgAntonio = loadImage("img/char-main.png");
-	
+	// Load a couple graphics
+	imgProspero = loadImage("img/char-prospero.png");
+	imgGonzalo = loadImage("img/char-ferdinand.png");
+	imgAntonio = loadImage("img/char-ferdinand.png");
+	imgBarrel = loadImage("img/char-barrel.png");
+	imgCrate  = loadImage("img/char-crate.png");
 	imgMap = loadImage("img/bg-beach.png");
 	imgLvl1 = loadImage("img/bg-lvl1.png");
 	imgLvl2 = loadImage("img/bg-beach.png");
 	imgLvl3 = loadImage("img/bg-beach.png");
-	
 	konamiImg = loadImage("img/konami.png");
 	
-	// background
+	// Main character
+	charMain = new Sprite(0, 0, 48, 64, imgProspero, S_PLAYER);
+	charMain.gotoCenter(width / 2, height / 2),
+	charMain.enclose = true;
+	
+	// Background
 	setMap(2048, 1280, imgMap);
 	
 	level = new Level(1);
@@ -116,7 +127,7 @@ function setup() {
  */
 function draw() {
 	
-	background(255, 0, 127);
+	//background(255, 0, 127);
 	
 	if (level.ending()) {
 		level.next();
@@ -128,48 +139,65 @@ function draw() {
 		charList[i].ai();
 	}
 	
-	if (l == 1) {
+	if (l == 1) { // Level 1: downward scroll
 		
-		// Player speed
-		var speed = 4;
+		var speed = 4; // Player speed
+		
 		if (clunk) {
 			var clunkiness = 4;
 			speed *= timer % clunkiness == 0 ? clunkiness : 0;
 		}
 		
-		// A // Left // X--
-		if (keyIsDown(65)) {
-			charMain.move(-speed, 0);
-		}
-		// D // Right // X++
-		if (keyIsDown(68)) {
-			charMain.move(speed, 0);
+		// S // Down // Y++
+		if (keyIsDown(83)) {
+			charMain.move(0, speed);
 		}
 		// W // Up // Y--
 		if (keyIsDown(87)) {
 			charMain.move(0, -speed);
 		}
-		// S // Down // Y++
-		if (keyIsDown(83)) {
-			charMain.move(0, speed);
+		// D // Right // X++
+		if (keyIsDown(68)) {
+			charMain.move(speed, 0);
+		}
+		// A // Left // X--
+		if (keyIsDown(65)) {
+			charMain.move(-speed, 0);
 		}
 		
-		// Map speed
-		speed = 2;
+		speed = 2; // Map/running speed
 		
 		charMain.move(0, -speed);
 		charMap.move(0, speed);
-		if (charMain.getBottom() > height) {
-			charMain.y -= charMain.height * 3;
-		}
-		
-		if (charMap.y == 0) {
+		if (charMap.y == 0) { // If map is on bottom, jump up
 			charMap.gotoY(height - charMap.height);
 		}
 		
+		if (charMain.getBottom() > height) { // If charMain us in danger, jump up
+			//charMain.y -= charMain.height * 3;
+			blowforth = 16;
+			//blowaside = (32 - (charMain.getCenterX() % 64));
+		}
+		
+		if (blowforth > 0) {
+			charMain.y -= blowforth;
+			blowforth--;
+			blowback = 0;
+		}
+		/*if (blowaside != 0) {
+			charMain.x += blowaside;
+			blowaside -= blowaside > 0 ? 1 : -1; // Decrease abs(blowaside)
+		}*/
+		
+		if (blowback > 0) { // Shoot backwards from barrel, decelerate
+			charMain.move(0, blowback);
+			blowback--;
+		}
+		
 	} else {
-		// Player speed
-		var speed = 4;
+		
+		var speed = 4; // Player speed
+		
 		if (clunk) {
 			var clunkiness = 4;
 			speed *= timer % clunkiness == 0 ? clunkiness : 0;
@@ -178,8 +206,8 @@ function draw() {
 		// A // Left // X--
 		if (keyIsDown(65)) {
 			charMain.move(-speed, 0);
-			if (!(charMain.getCenterX() > width / 2 || charMap.x + speed > 0)) {
-				charMap.move(speed, 0);
+			if (!(charMain.getCenterX() > width / 2 || charMap.x + speed > 0)) { // Is the map on the edge of the canvas?
+				charMap.move(speed, 0);                                          // If not, move the map and evrybody in charList[]
 			}
 		}
 		// D // Right // X++

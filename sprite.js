@@ -9,6 +9,7 @@
  * @author Panya Xiong
  */
 
+// Sprite IDs (enum)
 var S_MAP    = -1;
 var S_PLAYER = 0;
 var S_NPC    = 1;
@@ -22,6 +23,10 @@ var S_CRATE  = 3;
  */
 function Sprite(x, y, w, h, img, type) {
 	
+	this.contact = false;
+	this.width = w;
+	this.height = h;
+	
 	this.img = img;
 	this.enclose = false;
 	// Relative positions to sprite's contact origin
@@ -31,6 +36,27 @@ function Sprite(x, y, w, h, img, type) {
 	this.imgHeight = h;
 	
 	this.type = type;
+	
+	// Sprite position //
+	
+	this.getLeft = function() {
+		return this.x;
+	}
+	this.getRight = function() {
+		return this.x + this.width;
+	}
+	this.getTop = function() {
+		return this.y;
+	}
+	this.getBottom = function() {
+		return this.y + this.height;
+	}
+	this.getCenterX = function() {
+		return this.x + this.width / 2;
+	}
+	this.getCenterY = function() {
+		return this.y + this.height / 2;
+	}
 	
 	this.getImgLeft = function() {
 		return this.x + this.imgX;
@@ -44,28 +70,8 @@ function Sprite(x, y, w, h, img, type) {
 	this.getImgBottom = function() {
 		return this.y + this.imgY + this.imgHeight;
 	}
-	this.getCenterX = function() {
-		return this.x + this.width / 2;
-	}
-	this.getCenterY = function() {
-		return this.y + this.height / 2;
-	}
 	
-	this.contact = false;
-	this.width = w;
-	this.height = h;
-	this.getLeft = function() {
-		return this.x;
-	}
-	this.getRight = function() {
-		return this.x + this.width;
-	}
-	this.getTop = function() {
-		return this.y;
-	}
-	this.getBottom = function() {
-		return this.y + this.height;
-	}
+	// Basic sprite movement //
 	
 	this.gotoX = function(x) {
 		this.x = x;
@@ -99,6 +105,8 @@ function Sprite(x, y, w, h, img, type) {
 		this.gotoMapX(x);
 		this.gotoMapY(y);
 	}
+	
+	// *Fancy* sprite movement //
 	
 	this.move = function(x, y) {
 		var canMoveX = true;
@@ -138,14 +146,28 @@ function Sprite(x, y, w, h, img, type) {
 	}
 	
 	this.display = function() {
-		//try {
 		image(this.img, this.getImgLeft(), this.getImgTop(), this.imgWidth, this.imgHeight);
-		//} catch (e) {}
 	}
 	
+	// Assign AI by sprite type
 	if (this.type == S_BARREL) {
 		this.ai = function() {
 			this.y += 2;
+			
+			// Is charMain to the barrel's left? Right?
+			var toLeft  = this.getRight() <= charMain.getLeft();
+			var toRight = this.getLeft()  >= charMain.getRight();
+			var below   = this.getTop()   >= charMain.getBottom();
+			
+			// If charMain is touching from below, give him some blow
+			if (!(toLeft || toRight || below) && charMain.getTop() <= this.getBottom()) {
+				if (blowforth == 0) {
+					charMain.y = this.getBottom();
+					blowback = 16; // Shoot the player back at this speed
+				}
+				
+			} else {
+			}
 		}
 	} else {
 		this.ai = function() {}
