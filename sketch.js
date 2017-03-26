@@ -5,16 +5,16 @@
  * @author Owen Graham
  * @author Isaac Zaman
  * @author Justin Garza
- * @author Colemen Johnson
  * @author Panya Xiong
+ * @author Colemen Johnson
  */
 
 var AUTHORS = [
-	{name:"Owen Graham", role:"A Stick Named Paris"},
-	{name:"Isaac Zaman", role:"Sorcery & Other Things"},
-	{name:"Justin Garza", role:"A Hot Set of Wheels"},
-	{name:"Colemen \"CJ\" Johnson", role:"Icy Driveways"},
-	{name:"Panya Xiong", role:"Cheeseburger Sliders"}
+	{name:"Owen Graham",  role:"Lead Code"},
+	{name:"Isaac Zaman",  role:"Code"},
+	{name:"Justin Garza", role:"Graphics"},
+	{name:"Panya Xiong",  role:"Graphics"},
+	{name:"Colemen \"CJ\" Johnson", role:"Troubleshooting"}
 ];
 
 // Put AUTHORS into a string
@@ -27,10 +27,14 @@ var authorList = (function() {
 	return r;
 })();
 
-var charList = []; // Array of map-dependent sprites
-var timer = 0; // Counts game ticks defined by loops of draw()
-
-var clunk = false; // Will the game use 8-bit movement?
+var clunk = false;   // Will the game use 8-bit movement?
+var charList = [];   // Array of map-dependent sprites
+var timer = 0;       // Counts game ticks defined by loops of draw()
+var lvlSpeed = 0;    // Speed of level progression
+var lvlProgress = 0; // Distance travelled
+var blowback = 0;    // Barrel blowback
+var blowforth = 0;   // Escapes trappednesses
+var blowaside = 0;   // See above
 
 // Randomizers //
 
@@ -49,10 +53,6 @@ function getRandomInt2(min, max, x) { // Random int with interval
 function getRandomBoolean() {
 	return Math.floor(Math.random() * 2) == 1;
 }
-
-var blowback = 0;  // Barrel blowback
-var blowforth = 0; // Escapes trappednesses
-var blowaside = 0; // See above
 
 // Konami code functionality //
 
@@ -102,26 +102,29 @@ function setup() {
 	konamiCode = [UP_ARROW, UP_ARROW, DOWN_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, LEFT_ARROW, RIGHT_ARROW, 66, 65];
 	
 	// Load a couple graphics
-	imgProspero = loadImage("img/char-prospero.png");
-	imgGonzalo = loadImage("img/char-ferdinand.png");
-	imgAntonio = loadImage("img/char-ferdinand.png");
+	imgTitle  = loadImage("img/title.png");
+	imgProsF  = loadImage("img/char-pros-f.png");
+	imgProsB  = loadImage("img/char-pros-b.png");
+	imgFerdF  = loadImage("img/char-ferd-f.png");
+	imgFerdB  = loadImage("img/char-ferd-b.png");
 	imgBarrel = loadImage("img/char-barrel.png");
 	imgCrate  = loadImage("img/char-crate.png");
-	imgMap = loadImage("img/bg-beach.png");
-	imgLvl1 = loadImage("img/bg-lvl1.png");
-	imgLvl2 = loadImage("img/bg-beach.png");
-	imgLvl3 = loadImage("img/bg-beach.png");
+	imgMap    = loadImage("img/bg-beach.png");
+	imgLvl0   = loadImage("img/bg-lvl0.png");
+	imgLvl1   = loadImage("img/bg-lvl1.png");
+	imgLvl2   = loadImage("img/bg-beach.png");
+	imgLvl3   = loadImage("img/bg-beach.png");
 	konamiImg = loadImage("img/konami.png");
 	
 	// Main character
-	charMain = new Sprite(0, 0, 48, 64, imgProspero, S_PLAYER);
+	charMain = new Sprite(0, 0, 48, 64, imgProsB, S_PLAYER);
 	charMain.gotoCenter(width / 2, height / 2),
 	charMain.enclose = true;
 	
 	// Background
 	setMap(2048, 1280, imgMap);
 	
-	level = new Level(1);
+	level = new Level(0); // Get this party started!
 }
 
 /**
@@ -167,15 +170,35 @@ function draw() {
 			charMain.move(-speed, 0);
 		}
 		
-		speed = 2; // Map/running speed
+		lvlSpeed += (timer % 512 == 0) ? 1 : 0; // Every 512 ticks, increase the speed
+		speed = lvlSpeed; // Map/running speed
 		
 		charMain.move(0, -speed);
-		charMap.move(0, speed);
-		if (charMap.y == 0) { // If map is on bottom, jump up
+		
+		if (charMap.y + speed >= 0) { // If map is on bottom, jump up
 			charMap.gotoY(height - charMap.height);
+		} else {
+			charMap.move(0, speed);
 		}
 		
-		if (charMain.getBottom() > height) { // If charMain us in danger, jump up
+		// Sense if charMain is trapped in a sprite or something
+		var needsBlowforth = charMain.getBottom() > height; // Initialize and sense if below canvas view
+		for (var i = 0; i < charList.length; i++) {
+			var c = charList[i];
+			
+			// Determine whether charMain is outside of the object
+			var toLeft  = charMain.getRight()  <= c.getLeft();
+			var toRight = charMain.getLeft()   >= c.getRight();
+			var above   = charMain.getBottom() <= c.getTop();
+			var below   = charMain.getTop()    >= c.getBottom();
+			
+			if (!(toLeft || toRight || above || below)) { // If it's inside, it needs help!
+				needsBlowforth = true;
+			}
+			
+		}
+		
+		if (needsBlowforth) { // If charMain us in danger, jump up
 			//charMain.y -= charMain.height * 3;
 			blowforth = 16;
 			//blowaside = (32 - (charMain.getCenterX() % 64));
@@ -209,7 +232,7 @@ function draw() {
 		if (keyIsDown(65)) {
 			charMain.move(-speed, 0);
 			if (!(charMain.getCenterX() > width / 2 || charMap.x + speed > 0)) { // Is the map on the edge of the canvas?
-				charMap.move(speed, 0);                                          // If not, move the map and evrybody in charList[]
+				charMap.move(speed, 0);                                            // If not, move the map and evrybody in charList[]
 			}
 		}
 		// D // Right // X++
@@ -237,11 +260,14 @@ function draw() {
 		
 	level.draw();
 	
-	charMap.display();
-	for (var i = 0; i < charList.length; i++ ) {
-		charList[i].display();
+	// Display level sprites, if a game level is on
+	if (level.id > 0 && level.id < 10) {
+		charMap.display();
+		for (var i = 0; i < charList.length; i++ ) {
+			charList[i].display();
+		}
+		charMain.display();
 	}
-	charMain.display();
 	
 	// Konami code
 	if (keyIsPressed) {
@@ -266,6 +292,12 @@ function draw() {
 	}
 	
 	timer++;
+	lvlProgress += lvlSpeed;
+	/*$("#c").html(lvlSpeed + ", " + lvlProgress);
+	$("#c").append("<br/>");
+	for (var i = 0; i < charList.length; i++) {
+		$("#c").append(i + ": " + charList[i].y + ";&nbsp;&nbsp;&nbsp;&nbsp;");
+	}*/
 	
 }
 

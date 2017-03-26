@@ -5,16 +5,17 @@
  * @author Owen Graham
  * @author Isaac Zaman
  * @author Justin Garza
- * @author Colemen Johnson
  * @author Panya Xiong
+ * @author Colemen Johnson
  */
 
-// Sprite IDs (enum)
-var S_MAP    = -1;
-var S_PLAYER = 0;
-var S_NPC    = 1;
-var S_BARREL = 2;
-var S_CRATE  = 3;
+// Sprite IDs (enum: values don't matter, as long as they're unique)
+var S_A113   = 0;
+var S_MAP    = 1;
+var S_PLAYER = 2;
+var S_NPC    = 3;
+var S_BARREL = 4;
+var S_CRATE  = 5;
 
 /**
  * Sprite constructor
@@ -35,75 +36,50 @@ function Sprite(x, y, w, h, img, type) {
 	this.imgWidth = w;
 	this.imgHeight = h;
 	
+	this.color = (0, 0, 0);
+	
 	this.type = type;
 	
 	// Sprite position //
 	
-	this.getLeft = function() {
-		return this.x;
-	}
-	this.getRight = function() {
-		return this.x + this.width;
-	}
-	this.getTop = function() {
-		return this.y;
-	}
-	this.getBottom = function() {
-		return this.y + this.height;
-	}
+	this.getLeft = function() { return this.x; }
+	this.getRight = function() { return this.x + this.width; }
+	this.getTop = function() { return this.y; }
+	this.getBottom = function() { return this.y + this.height; }
 	this.getCenterX = function() {
 		return this.x + this.width / 2;
 	}
-	this.getCenterY = function() {
-		return this.y + this.height / 2;
-	}
+	this.getCenterY = function() { return this.y + this.height / 2; }
 	
-	this.getImgLeft = function() {
-		return this.x + this.imgX;
-	}
-	this.getImgRight = function() {
-		return this.x + this.imgX + this.imgWidth;
-	}
-	this.getImgTop = function() {
-		return this.y + this.imgY;
-	}
-	this.getImgBottom = function() {
-		return this.y + this.imgY + this.imgHeight;
-	}
+	this.getImgLeft = function() { return this.x + this.imgX; }
+	this.getImgRight = function() { return this.x + this.imgX + this.imgWidth; }
+	this.getImgTop = function() { return this.y + this.imgY; }
+	this.getImgBottom = function() { return this.y + this.imgY + this.imgHeight; }
 	
 	// Basic sprite movement //
 	
-	this.gotoX = function(x) {
-		this.x = x;
-	}
-	this.gotoY = function(y) {
-		this.y = y;
-	}
+	this.gotoX = function(x) { this.x = x; return this; }
+	this.gotoY = function(y) { this.y = y; return this; }
 	this.goto = function(x, y) {
 		this.gotoX(x);
 		this.gotoY(y);
+		return this;
 	}
 	
-	this.gotoCenterX = function(x) {
-		this.x = x - this.width / 2;
-	}
-	this.gotoCenterY = function(y) {
-		this.y = y - this.height / 2;
-	}
+	this.gotoCenterX = function(x) { this.x = x - this.width / 2; return this; }
+	this.gotoCenterY = function(y) { this.y = y - this.height / 2; return this; }
 	this.gotoCenter = function(x, y) {
 		this.gotoCenterX(x);
 		this.gotoCenterY(y);
+		return this;
 	}
 	
-	this.gotoMapX = function(x) {
-		this.x = charMap.x + x;
-	}
-	this.gotoMapY = function(y) {
-		this.y = charMap.y + y;
-	}
+	this.gotoMapX = function(x) { this.x = charMap.x + x; return this; }
+	this.gotoMapY = function(y) { this.y = charMap.y + y; return this; }
 	this.gotoMap = function(x, y) {
 		this.gotoMapX(x);
 		this.gotoMapY(y);
+		return this;
 	}
 	
 	// *Fancy* sprite movement //
@@ -119,6 +95,12 @@ function Sprite(x, y, w, h, img, type) {
 			}
 			if ((this.getTop() + y < 0 || this.getBottom() + y > height) && (this.getTop() >= 0 && this.getBottom() <= height)) {
 				canMoveY = false;
+			}
+			
+			if (level.id == 1) { // Keep charMain inside lvl1's narrow borders
+				if (this.getLeft() + x < 256 || this.getRight() + x > 768) {
+					canMoveX = false;
+				}
 			}
 		}
 		
@@ -143,10 +125,19 @@ function Sprite(x, y, w, h, img, type) {
 		
 		this.x += canMoveX ? x : 0;
 		this.y += canMoveY ? y : 0;
+		
+		return this;
 	}
 	
 	this.display = function() {
-		image(this.img, this.getImgLeft(), this.getImgTop(), this.imgWidth, this.imgHeight);
+		/*if (this.img.width <= 1) {
+			fill(this.color);
+			noStroke();
+			rect(this.getImgLeft(), this.getImgTop(), this.imgWidth, this.imgHeight);
+		} else*/
+			image(this.img, this.getImgLeft(), this.getImgTop(), this.imgWidth, this.imgHeight);
+			
+			return this;
 	}
 	
 	// Assign AI by sprite type
@@ -168,9 +159,11 @@ function Sprite(x, y, w, h, img, type) {
 				
 			} else {
 			}
+			
+			return this;
 		}
 	} else {
-		this.ai = function() {}
+		this.ai = function() { return this; }
 	}
 	
 	this.goto(x, y);

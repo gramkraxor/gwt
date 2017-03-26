@@ -2,11 +2,11 @@ body {
 	padding: 0;
 	margin: 0;
 	/*/font-family: "Ubuntu Mono", "Consolas", "Courier New", Monospace;/*/
-	font-family: "Ubuntu", "Trebuchet MS", "Verdana", Sans-Serif;/**/
-	background: #333;
-	background: url("img/bg.png") no-repeat fixed center top;
+	font-family: "Ubuntu", "Trebuchet MS", "Arial", Sans-Serif;/**/
+	background: #081018 url("img/bg.png") no-repeat fixed center top;
 	/*background-size: calc(100vh * 16 / 9) 100vh;*/
-	background-size: 192vh 108vh;
+	/*background-size: 192vh 108vh;*/
+	background-size: 100%;
 	text-align: center;
 }
 
@@ -75,6 +75,10 @@ canvas, iframe {
 
 #copyright {
 	font-size: 12px;
+}
+
+#c {
+	font-family: "Ubuntu Mono", "Consolas", monospace;
 }
 
 ::selection {
