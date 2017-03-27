@@ -10,12 +10,14 @@
  */
 
 // Sprite IDs (enum: values don't matter, as long as they're unique)
-var S_A113   = 0;
-var S_MAP    = 1;
-var S_PLAYER = 2;
-var S_NPC    = 3;
-var S_BARREL = 4;
-var S_CRATE  = 5;
+var S_A113    = 0;
+var S_MAP     = 1;
+var S_PLAYER  = 2;
+var S_NPC     = 3;
+var S_BARREL  = 4;
+var S_CRATE   = 5;
+var S_COCONUT = 6;
+var S_ROCK    = 7;
 
 /**
  * Sprite constructor
@@ -141,7 +143,7 @@ function Sprite(x, y, w, h, img, type) {
 	}
 	
 	// Assign AI by sprite type
-	if (this.type == S_BARREL) {
+	if (this.type == S_BARREL || this.type == S_COCONUT) {
 		this.ai = function() {
 			this.y += 2;
 			

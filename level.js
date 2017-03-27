@@ -8,6 +8,13 @@
  * @author Panya Xiong
  * @author Colemen Johnson
  */
+ 
+ var next = 0;
+ 
+ function fadeTo(l) {
+ 	level = new Level(999);
+ 	next = l;
+ }
 
 /**
  * Level constructor
@@ -45,15 +52,14 @@ function Level(l) { // Letter L, level ID
 		
 		this.draw = function() {
 			
-			var font = "Ubuntu Mono";
-			var ps2p = "PRESS START TO PLAY";
-			var offset = 2;
-			
 			// Draw the sprites
 			charBg.display();
 			charTitle.display();
 			
 			// Press start 2 p, but blink, but only if bg can render
+			var font = "Ubuntu Mono";
+			var ps2p = "PRESS START TO PLAY";
+			var offset = 2;
 			if (timer % 64 < 32 && charBg.img.width > 1) {
 				textSize(32);
 				textFont(font);
@@ -62,7 +68,6 @@ function Level(l) { // Letter L, level ID
 				text(ps2p, width / 2 + offset, 480 + offset);
 				fill(255);
 				text(ps2p, width / 2, 480);
-				
 			}
 		}
 		
@@ -105,7 +110,8 @@ function Level(l) { // Letter L, level ID
 			"minions to fell  a  ship",
 			"unto  his   domain,  its",
 			"passengers the rulers of",
-			"his past kingdom:       ",
+			"his past kingdom.       ",
+			"",
 			"",
 			"A wicked storm whips the",
 			"ship closer  and  closer",
@@ -113,7 +119,7 @@ function Level(l) { // Letter L, level ID
 			"fights it  with  all  of",
 			"their    strength    and",
 			"skill, only  to  be  met",
-			"With  their   inevitable",
+			"with  their   inevitable",
 			"doom.                   ",
 			"",
 			"As  calamity  strikes, a",
@@ -129,6 +135,7 @@ function Level(l) { // Letter L, level ID
 			background(0);
 			textSize(32);
 			textFont("Ubuntu Mono");
+			textStyle(BOLD);
 			textAlign(CENTER);
 			fill(255, 255, 0);
 			for (var i = 0; i < scrolly.length; i++) {
@@ -151,11 +158,6 @@ function Level(l) { // Letter L, level ID
 		charMain.img = imgFerdB;
 		charMain.gotoCenter(width / 2, 480);
 		
-		// Summon 2 sprites for fun
-		
-		charList.push(new Sprite(0, 0, 48, 64, imgFerdF, S_NPC).gotoCenter(width / 2 + 128, height / 2));
-		charList.push(new Sprite(0, 0, 48, 64, imgFerdF, S_NPC).gotoCenter(width / 2 - 128, height / 2));
-		
 		// change the map to lvl1 configuration
 		setMap(1024, 1280, imgLvl1);
 		charMap.display = function() {
@@ -195,7 +197,7 @@ function Level(l) { // Letter L, level ID
 			return lvlProgress > 8191;
 		}
 		this.next = function() {
-			level = new Level(101);
+			fadeTo(101);
 		}
 		
 	} else if (l == 101) { // Cutscene 1
@@ -204,15 +206,37 @@ function Level(l) { // Letter L, level ID
 		var startHeight = height + 128;
 		
 		var scrolly = [
-			"Prospero  must surrender",
-			"his  magical   knowledge",
-			"to return home....      "
+			"The nobles of the  boat,",
+			"surprisedly alive, awake",
+			"on   the    island    of",
+			"Prospero. They have been",
+			"scattered across foreign",
+			"beaches.     A     grief",
+			"stricken king, two fools",
+			"with a  bottle of  wine,",
+			"a   traitor,   a   royal",
+			"seeking  a  dark   path,",
+			"and the missing prince. ",
+			"",
+			"The    great    sorcerer",
+			"commences his  scheme to",
+			"bond the prince and  his",
+			"own  daughter,  Miranda.",
+			"With them love stricken,",
+			"he  must  also surrender",
+			"his wizardry if he is to",
+			"return  to his  home. He",
+			"makes  his  way  through",
+			"the jungle to  meet  the",
+			"castaways   and  abandon",
+			"his magic....           "
 		];
 		
 		this.draw = function() {
 			background(0);
 			textSize(32);
 			textFont("Ubuntu Mono");
+			textStyle(BOLD);
 			textAlign(CENTER);
 			fill(255, 255, 0);
 			for (var i = 0; i < scrolly.length; i++) {
@@ -231,19 +255,13 @@ function Level(l) { // Letter L, level ID
 		
 	} else if (l == 2) { // Level 2
 		
-		console.log("LEVEL II");
-		
 		charList = [];
 		
 		charMain.img = imgProsB;
 		charMain.gotoCenter(width / 2, 480);
 		
-		// Summon 2 sprites for fun
-		
-		charList.push(new Sprite(0, 0, 48, 64, imgFerdF, S_NPC).gotoMap(144, 144)); // Bob
-		
 		// change the map to lvl1 configuration
-		setMap(1024, 1280, imgLvl1);
+		setMap(1024, 1280, imgLvl2);
 		charMap.display = function() {
 			image(this.img, this.getImgLeft(), this.getImgTop(), this.imgWidth, this.imgHeight / 2);
 			image(this.img, this.getImgLeft(), this.getImgTop() + this.imgHeight / 2, this.imgWidth, this.imgHeight / 2);
@@ -264,8 +282,8 @@ function Level(l) { // Letter L, level ID
 				}*/
 				
 				// Generate sprites at 32px intervals above the canvas, between x=256 and x=768
-				charList.push(new Sprite(getRandomInt2(256, width - 256, 64), -64, 64, 64, imgBarrel, S_BARREL));
-				charList.push(new Sprite(getRandomInt2(256, width - 256, 64), -64, 64, 64, imgCrate, S_CRATE));
+				charList.push(new Sprite(getRandomInt2(256, width - 256, 64), -64, 64, 64, imgCoconut, S_COCONUT));
+				charList.push(new Sprite(getRandomInt2(256, width - 256, 64), -64, 64, 64, imgRock, S_ROCK));
 				
 				for (var i = charList.length - 1; i >= 0; i--) {
 					var ch = charList[i];
@@ -281,7 +299,94 @@ function Level(l) { // Letter L, level ID
 			return lvlProgress > 8191;
 		}
 		this.next = function() {
-			level = new Level(101);
+			fadeTo(102);
+		}
+		
+	} else if (l == 102) { // Cutscene 2
+		
+		var lineHeight = 36;
+		var startHeight = height + 128;
+		
+		var scrolly = [
+			"And so, Prospero, having",
+			"made  his peace and  his",
+			"reputation     restored,",
+			"along  with all  who had",
+			"washed up  to the island",
+			"of   Sycorax  leave  for",
+			"Milan. So  concludes the",
+			"story of the Tempest.   "
+		];
+		
+		this.draw = function() {
+			background(0);
+			textSize(32);
+			textFont("Ubuntu Mono");
+			textStyle(BOLD);
+			textAlign(CENTER);
+			fill(255, 255, 0);
+			for (var i = 0; i < scrolly.length; i++) {
+				text(scrolly[i], width / 2, startHeight + i * lineHeight);
+			}
+			startHeight--;
+		}
+		
+		this.ending = function() {
+			return startHeight + scrolly.length * lineHeight < 0 || (keyIsDown(UP_ARROW) && keyIsDown(87));
+		}
+		
+		this.next = function() {
+			level = new Level(99);
+		}
+		
+	} else if (l == 99) { // End
+		
+		var lineHeight = 36;
+		
+		var scrolly = [ "Tempest, a game by:" ];
+		for (var i = 0; i < AUTHORS.length; i++) {
+			var a = AUTHORS[i];
+			scrolly.push(a.name + ".".repeat(40 - a.name.length - a.role.length) + a.role);
+		}
+		scrolly.push("Great World Texts 2016-2017");
+		
+		var textHeight = 0;
+		for (var i = 0; i < scrolly.length; i++) {
+			textHeight += lineHeight;
+		}
+		var startHeight = (height - textHeight) / 2;
+		
+		this.draw = function() {
+			background(0);
+			textSize(24);
+			textFont("Ubuntu Mono");
+			textStyle(NORMAL);
+			textAlign(CENTER);
+			fill(timer > 255 ? 255 : timer);
+			for (var i = 0; i < scrolly.length; i++) {
+				text(scrolly[i], width / 2, startHeight + i * lineHeight);
+			}
+		}
+		
+		this.ending = function() {
+			return false;
+		}
+		
+		this.next = function() {
+		}
+		
+	} else if (l == 999) { // Fader
+		
+		this.draw = function() {
+			background(0, 0, 0, Math.ceil(timer / 2));
+		}
+		
+		this.ending = function() {
+			return timer >= 64;
+		}
+		
+		this.next = function() {
+			level = new Level(next);
 		}
 		
 	} else { // Default

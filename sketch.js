@@ -33,8 +33,6 @@ var timer = 0;       // Counts game ticks defined by loops of draw()
 var lvlSpeed = 0;    // Speed of level progression
 var lvlProgress = 0; // Distance travelled
 var blowback = 0;    // Barrel blowback
-//var blowforth = 0;   // Escapes trappednesses
-//var blowaside = 0;   // See above
 
 // Randomizers //
 
@@ -83,18 +81,19 @@ function setup() {
 	konamiCode = [UP_ARROW, UP_ARROW, DOWN_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, LEFT_ARROW, RIGHT_ARROW, 66, 65];
 	
 	// Load a couple graphics
-	imgTitle  = loadImage("img/title.png");
-	imgProsF  = loadImage("img/char-pros-f.png");
-	imgProsB  = loadImage("img/char-pros-b.png");
-	imgFerdF  = loadImage("img/char-ferd-f.png");
-	imgFerdB  = loadImage("img/char-ferd-b.png");
-	imgBarrel = loadImage("img/char-barrel.png");
-	imgCrate  = loadImage("img/char-crate.png");
-	imgMap    = loadImage("img/bg-beach.png");
-	imgLvl0   = loadImage("img/bg-lvl0.png");
-	imgLvl1   = loadImage("img/bg-lvl1.png");
-	imgLvl2   = loadImage("img/bg-beach.png");
-	imgLvl3   = loadImage("img/bg-beach.png");
+	imgTitle   = loadImage("img/title.png");
+	imgProsF   = loadImage("img/char-pros-f.png");
+	imgProsB   = loadImage("img/char-pros-b.png");
+	imgFerdF   = loadImage("img/char-ferd-f.png");
+	imgFerdB   = loadImage("img/char-ferd-b.png");
+	imgBarrel  = loadImage("img/char-barrel.png");
+	imgCrate   = loadImage("img/char-crate.png");
+	imgCoconut = loadImage("img/char-coconut.png");
+	imgRock    = loadImage("img/char-rock.png");
+	imgMap     = loadImage("img/bg-beach.png");
+	imgLvl0    = loadImage("img/bg-lvl0.png");
+	imgLvl1    = loadImage("img/bg-lvl1.png");
+	imgLvl2    = loadImage("img/bg-lvl2.png");
 	
 	// Main character
 	charMain = new Sprite(0, 0, 48, 64, imgProsB, S_PLAYER);
@@ -113,7 +112,7 @@ function draw() {
 	
 	//background(0);
 	
-	if (level.ending()) {
+	if (level.ending() || (keyIsDown(ESCAPE) && level.id >=1 && level.id < 10)) {
 		level.next();
 	}
 	
@@ -186,6 +185,13 @@ function draw() {
 		if (needsBlowforth) { // If charMain us in danger,
 			charMain.y -= 16;   // jump up,
 			blowback = 0;       // and stop flying backwards
+			if (charMain.getLeft() % 64 > charMain.getRight() % 64) {
+				if (charMain.getCenterX() % 64 >= 32) {
+					charMain.x -= charMain.getRight() - charMain.getCenterX();
+				} else {
+					charMain.x += charMain.getCenterX() - charMain.getLeft();
+				}
+			}
 			/*blowforth = 8;
 			if (blowaside == 0) {
 				blowaside = (32 - (charMain.getCenterX() % 64) / 2);
@@ -289,6 +295,20 @@ function draw() {
 	for (var i = 0; i < charList.length; i++) {
 		$("#c").append(i + ": " + charList[i].y + ";&nbsp;&nbsp;&nbsp;&nbsp;");
 	}*/
+	
+	// Indicate controls in lvl1
+	if (timer % 32 < 16 && timer < 256 && level.id == 1) {
+		var font = "Ubuntu Mono";
+		var wasd = "WASD TO MOVE";
+		var offset = 2;
+		textSize(32);
+		textFont(font);
+		textAlign(CENTER);
+		fill(0);
+		text(wasd, width / 2 + offset, height - 32 + offset);
+		fill(255);
+		text(wasd, width / 2, height - 32);
+	}
 	
 }
 
