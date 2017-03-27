@@ -41,6 +41,7 @@ function Level(l) { // Letter L, level ID
 	charList = [];
 	timer = 0;
 	lvlProgress = 0;
+	lvlSpeed = 1;
 	
 	setMap(2048, 1280, imgMap);
 	
