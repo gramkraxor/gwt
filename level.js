@@ -195,7 +195,7 @@ function Level(l) { // Letter L, level ID
 		}
 		
 		this.ending = function() {
-			return lvlProgress > 8191;
+			return lvlProgress >= 4096;
 		}
 		this.next = function() {
 			fadeTo(101);
@@ -297,7 +297,7 @@ function Level(l) { // Letter L, level ID
 		}
 		
 		this.ending = function() {
-			return lvlProgress > 8191;
+			return lvlProgress >= 4096;
 		}
 		this.next = function() {
 			fadeTo(102);
