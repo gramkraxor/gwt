@@ -146,7 +146,7 @@ function Level(l) { // Letter L, level ID
 		}
 		
 		this.ending = function() {
-			return startHeight + scrolly.length * lineHeight < 0 || (keyIsDown(UP_ARROW) && keyIsDown(87));
+			return startHeight + scrolly.length * lineHeight < 0 || keyIsDown(87);
 		}
 		
 		this.next = function() {
@@ -247,7 +247,7 @@ function Level(l) { // Letter L, level ID
 		}
 		
 		this.ending = function() {
-			return startHeight + scrolly.length * lineHeight < 0 || (keyIsDown(UP_ARROW) && keyIsDown(87));
+			return startHeight + scrolly.length * lineHeight < 0 || keyIsDown(87);
 		}
 		
 		this.next = function() {
@@ -333,7 +333,7 @@ function Level(l) { // Letter L, level ID
 		}
 		
 		this.ending = function() {
-			return startHeight + scrolly.length * lineHeight < 0 || (keyIsDown(UP_ARROW) && keyIsDown(87));
+			return startHeight + scrolly.length * lineHeight < 0 || keyIsDown(87);
 		}
 		
 		this.next = function() {
