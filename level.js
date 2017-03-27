@@ -314,7 +314,7 @@ function Level(l) { // Letter L, level ID
 			"reputation     restored,",
 			"along  with all  who had",
 			"washed up  to the island",
-			"of   Sycorax  leave  for",
+			"of  Sycorax,  leave  for",
 			"Milan. So  concludes the",
 			"story of the Tempest.   "
 		];
