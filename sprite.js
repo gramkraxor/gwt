@@ -97,7 +97,7 @@ function Sprite(x, y, w, h, img, type) {
 				canMoveY = false;
 			}
 			
-			if (level.id == 1) { // Keep charMain inside lvl1's narrow borders
+			if (level.id >= 1 && level.id < 10) { // Keep charMain inside lvl1's narrow borders
 				if (this.getLeft() + x < 256 || this.getRight() + x > 768) {
 					canMoveX = false;
 				}
@@ -152,10 +152,12 @@ function Sprite(x, y, w, h, img, type) {
 			
 			// If charMain is touching from below, give him some blow
 			if (!(toLeft || toRight || below) && charMain.getTop() <= this.getBottom()) {
-				if (blowforth == 0) {
-					charMain.y = this.getBottom();
-					blowback = 16; // Shoot the player back at this speed
-				}
+				//if (blowforth == 0) {
+				//charMain.y = this.getBottom();
+				blowback = 16; // Shoot the player back at this speed
+				lvlSpeed = Math.floor(lvlSpeed * 2 / 3); // Slow down the level, but not to 0
+				lvlSpeed += lvlSpeed < 1 ? 1 : 0;
+				//}
 				
 			} else {
 			}

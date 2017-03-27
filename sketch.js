@@ -33,8 +33,8 @@ var timer = 0;       // Counts game ticks defined by loops of draw()
 var lvlSpeed = 0;    // Speed of level progression
 var lvlProgress = 0; // Distance travelled
 var blowback = 0;    // Barrel blowback
-var blowforth = 0;   // Escapes trappednesses
-var blowaside = 0;   // See above
+//var blowforth = 0;   // Escapes trappednesses
+//var blowaside = 0;   // See above
 
 // Randomizers //
 
@@ -56,32 +56,13 @@ function getRandomBoolean() {
 
 // Konami code functionality //
 
-var ytId = "QH2-TGUlwu4"; // Nyan Cat
-var ytT = 4;
-var ytUrl = "http://www.youtube.com/embed/" + ytId + "?autoplay=1&disablekb=1&rel=0&controls=0&start=" + ytT;
-
 var konamiCode;
-var konamiImg;
 var konamiProgress = 0;
-var konamiTime;
-var konamiDuration = 8
-var NEVER   = 0; // Never Gonna Give You Up
-var NYAN    = 1; // Nyan Cat
-var YOUTUBE = 2; // Youtube embed
-var konamiMode = YOUTUBE;
 function konami() {
-	if (konamiMode == NEVER) {
-		var url = "http://youtu.be/dQw4w9WgXcQ?t=42"; // Never Gonna Give You Up
-		$(location).attr("href", url);
-	} else if (konamiMode == NYAN) {
-		image(konamiImg, 0, 0, width, height);
-	} else if (konamiMode == YOUTUBE) {
-		$("iframe").remove();
-		
-		$("canvas").remove();
-		//$("#alt").remove();
-		$("#page").append("<iframe style=\"height:" + height + "px;width:" + width + "px;\" src=\"" + ytUrl + "\"></iframe>");
-	}
+	$("iframe").remove();
+	$("canvas").remove();
+	var ytUrl = "http://www.youtube.com/embed/" + "QH2-TGUlwu4" + "?autoplay=1&disablekb=1&rel=0&controls=0&start=" + 4;
+	$("#page").append("<iframe style=\"height:" + height + "px;width:" + width + "px;\" src=\"" + ytUrl + "\"></iframe>");
 }
 
 /**
@@ -114,11 +95,9 @@ function setup() {
 	imgLvl1   = loadImage("img/bg-lvl1.png");
 	imgLvl2   = loadImage("img/bg-beach.png");
 	imgLvl3   = loadImage("img/bg-beach.png");
-	konamiImg = loadImage("img/konami.png");
 	
 	// Main character
 	charMain = new Sprite(0, 0, 48, 64, imgProsB, S_PLAYER);
-	charMain.gotoCenter(width / 2, height / 2),
 	charMain.enclose = true;
 	
 	// Background
@@ -132,7 +111,7 @@ function setup() {
  */
 function draw() {
 	
-	//background(255, 0, 127);
+	//background(0);
 	
 	if (level.ending()) {
 		level.next();
@@ -144,7 +123,8 @@ function draw() {
 		charList[i].ai();
 	}
 	
-	if (l == 1) { // Level 1: downward scroll
+	if (l == 0) {
+	} else if (l >= 1 && l < 10) { // Level  & 21: downward scroll
 		
 		var speed = 4; // Player speed
 		
@@ -154,31 +134,36 @@ function draw() {
 		}
 		
 		// S // Down // Y++
-		if (keyIsDown(83)) {
+		if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
 			charMain.move(0, speed);
 		}
 		// W // Up // Y--
-		if (keyIsDown(87)) {
+		if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
 			charMain.move(0, -speed);
 		}
 		// D // Right // X++
-		if (keyIsDown(68)) {
+		if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
 			charMain.move(speed, 0);
 		}
 		// A // Left // X--
-		if (keyIsDown(65)) {
+		if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
 			charMain.move(-speed, 0);
 		}
 		
 		lvlSpeed += (timer % 512 == 0) ? 1 : 0; // Every 512 ticks, increase the speed
 		speed = lvlSpeed; // Map/running speed
 		
+		// Move the background down as charMain stays in the same place
+		charMap.move(0, speed);
 		charMain.move(0, -speed);
 		
 		if (charMap.y + speed >= 0) { // If map is on bottom, jump up
 			charMap.gotoY(height - charMap.height);
-		} else {
-			charMap.move(0, speed);
+		}
+		
+		if (blowback > 0) { // Shoot backwards from barrel, decelerate
+			charMain.move(0, blowback);
+			blowback--;
 		}
 		
 		// Sense if charMain is trapped in a sprite or something
@@ -198,26 +183,39 @@ function draw() {
 			
 		}
 		
-		if (needsBlowforth) { // If charMain us in danger, jump up
-			//charMain.y -= charMain.height * 3;
-			blowforth = 16;
-			//blowaside = (32 - (charMain.getCenterX() % 64));
+		if (needsBlowforth) { // If charMain us in danger,
+			charMain.y -= 16;   // jump up,
+			blowback = 0;       // and stop flying backwards
+			/*blowforth = 8;
+			if (blowaside == 0) {
+				blowaside = (32 - (charMain.getCenterX() % 64) / 2);
+			}*/
 		}
 		
-		if (blowforth > 0) {
+		/*if (blowforth > 0) {
 			charMain.y -= blowforth;
 			blowforth--;
 			blowback = 0;
-		}
-		/*if (blowaside != 0) {
-			charMain.x += blowaside;
-			blowaside -= blowaside > 0 ? 1 : -1; // Decrease abs(blowaside)
 		}*/
-		
-		if (blowback > 0) { // Shoot backwards from barrel, decelerate
-			charMain.move(0, blowback);
-			blowback--;
-		}
+		/*if (blowaside != 0) {
+			if (blowaside > 0) {
+				if (charMain.getRight() + blowaside <= 768) {
+					charMain.x += blowaside;
+					blowaside--;
+				} else {
+					charMain.gotoX(768 - charMain.width);
+					blowaside = 0;
+				}
+			} else {
+				if (charMain.getLeft() + blowaside >= 256) {
+					charMain.x += blowaside;
+					blowaside++;
+				} else {
+					charMain.gotoX(256);
+					blowaside = 0;
+				}
+			}
+		}*/
 		
 	} else {
 		
@@ -229,28 +227,28 @@ function draw() {
 		}
 		
 		// A // Left // X--
-		if (keyIsDown(65)) {
+		if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
 			charMain.move(-speed, 0);
 			if (!(charMain.getCenterX() > width / 2 || charMap.x + speed > 0)) { // Is the map on the edge of the canvas?
 				charMap.move(speed, 0);                                            // If not, move the map and evrybody in charList[]
 			}
 		}
 		// D // Right // X++
-		if (keyIsDown(68)) {
+		if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
 			charMain.move(speed, 0);
 			if (!(charMain.getCenterX() < width / 2 || charMap.x + charMap.width - speed < width)) {
 				charMap.move(-speed, 0);
 			}
 		}
 		// W // Up // Y--
-		if (keyIsDown(87)) {
+		if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
 			charMain.move(0, -speed);
 			if (!(charMain.getCenterY() > height / 2 || charMap.y + speed > 0)) {
 				charMap.move(0, speed);
 			}
 		}
 		// S // Down // Y++
-		if (keyIsDown(83)) {
+		if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
 			charMain.move(0, speed);
 			if (!(charMain.getCenterY() < height / 2 || charMap.y + charMap.height - speed < height)) {
 				charMap.move(0, -speed);
@@ -279,16 +277,9 @@ function draw() {
 			konamiProgress = 0;
 		}
 	}
-	//$("#title").html(konamiProgress);
 	if (konamiProgress >= konamiCode.length) {
-		if (konamiMode == NEVER || konamiMode == YOUTUBE) {
-			konami();
-		}
-		konamiProgress = 0;
-		konamiTime = timer + konamiDuration;
-	}
-	if (konamiMode == NYAN && konamiTime > timer) {
 		konami();
+		konamiProgress = 0;
 	}
 	
 	timer++;
