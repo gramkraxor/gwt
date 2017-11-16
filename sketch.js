@@ -59,7 +59,7 @@ var konamiProgress = 0;
 function konami() {
 	$("iframe").remove();
 	$("canvas").remove();
-	var ytUrl = "http://www.youtube.com/embed/" + "QH2-TGUlwu4" + "?autoplay=1&disablekb=1&rel=0&controls=0&start=" + 4;
+	var ytUrl = "https://www.youtube.com/embed/" + "QH2-TGUlwu4" + "?autoplay=1&disablekb=1&rel=0&controls=0&start=" + 4;
 	$("#page").append("<iframe style=\"height:" + height + "px;width:" + width + "px;\" src=\"" + ytUrl + "\"></iframe>");
 }
 
